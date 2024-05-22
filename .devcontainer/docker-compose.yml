@@ -1,0 +1,35 @@
+version: '3.5'
+# 网络配置
+networks:
+  backend:
+    driver: bridge
+  go-zero-shop_backend:
+    external: true  # 声明该网络是外部已存在的网络
+services:
+  app:                                # 自定义容器名称
+    build:
+      context: ./                 # 指定构建使用的 Dockerfile 文件
+    environment:                         # 设置环境变量
+      - TZ=Asia/Shanghai
+    privileged: true
+    volumes:                             # 设置挂载目录
+      - ../../ShortChainSyste:/var/www/ShortChainSyste:rw                    # 设置挂载目录    
+    user: root  # 设置使用 root 用户权限
+    ports:
+      - "40000:8080"
+    working_dir: /var/www #工作文件夹
+    stdin_open: true                     # 打开标准输入，可以接受外部输入
+    tty: true
+    networks:
+      - backend
+      - go-zero-shop_backend
+    restart: always                      # 指定容器退出后的重启策略为始终重启
+
+    # Uncomment the next four lines if you will use a ptrace-based debuggers like C++, Go, and Rust.
+    # cap_add:
+    #  - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:unconfined
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
