@@ -15,4 +15,5 @@ import (
 
 func AddApiRouter(e *gin.Engine) {
 	e.GET("/:shortCode", controller.ShortChainC.Access)
+	e.POST("/shortUrlCreate", controller.ShortChainC.Create)
 }

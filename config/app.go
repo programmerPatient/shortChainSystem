@@ -20,7 +20,9 @@ func init() {
 			// 是否进入调试模式
 			"debug": config.Env("APP_DEBUG", false),
 			// 应用服务host
-			"host": config.Env("APP_HOST", "127.0.0.1"),
+			"host": config.Env("APP_HOST", "127.0.0.1:40000"),
+			// 对外的应用服务host
+			"foreign_host": "127.0.0.1:40000",
 			// 应用服务端口
 			"port": config.Env("APP_PORT", 9000),
 			// 加密密钥

@@ -252,6 +252,15 @@ func (rds RedisClient) HIncrBy(key string, field string, incr int64) int64 {
 	return result
 }
 
+func (rds RedisClient) Incr(key string) int64 {
+	var result int64
+	var err error
+	if result, err = rds.Client.Incr(rds.Context, key).Result(); err != nil {
+		logger.ErrorString("Redis", "Incr", err.Error())
+	}
+	return result
+}
+
 func (rds RedisClient) HIncrByFloat(key string, field string, incr float64) float64 {
 	var result float64
 	var err error

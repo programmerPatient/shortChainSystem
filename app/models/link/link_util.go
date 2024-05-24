@@ -1,26 +1,26 @@
 package link
 
 import (
-    "github.com/laravelGo/core/database"
+	"github.com/laravelGo/core/database"
 )
 
 func Get(idstr string) (link Link) {
-    database.DB.Where("id", idstr).First(&link)
-    return
+	database.DB.Where("id", idstr).First(&link)
+	return
 }
 
-func GetBy(field, value string) (link Link) {
-    database.DB.Where("? = ?", field, value).First(&link)
-    return
+func GetByShortUrl(value string) (link Link) {
+	database.DB.Where("short_url = ?", value).First(&link)
+	return
 }
 
 func All() (links []Link) {
-    database.DB.Find(&links)
-    return 
+	database.DB.Find(&links)
+	return
 }
 
 func IsExist(field, value string) bool {
-    var count int64
-    database.DB.Model(Link{}).Where("? = ?", field, value).Count(&count)
-    return count > 0
+	var count int64
+	database.DB.Model(Link{}).Where("? = ?", field, value).Count(&count)
+	return count > 0
 }

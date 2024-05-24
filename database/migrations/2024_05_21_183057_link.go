@@ -15,7 +15,7 @@ func init() {
 		models.BaseModel
 
 		ShortUrl    string `gorm:"type:varchar(255);not null;unique"`
-		OriginalUrl string `gorm:"type:varchar(255);unique;default:null"`
+		OriginalUrl string `gorm:"type:varchar(2083);unique;default:null"`
 
 		models.CommonTimestampsField
 	}

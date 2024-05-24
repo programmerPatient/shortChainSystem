@@ -23,5 +23,4 @@ var IndexC = &IndexController{}
 // @Success 200 {string} json "{"message":"success"}"
 // @Router / [get]
 func (c *IndexController) Index(ctx *gin.Context) {
-
 }
