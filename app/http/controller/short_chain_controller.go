@@ -47,7 +47,7 @@ func (c *ShortChainController) Create(ctx *gin.Context) {
 	// 调用服务创建短链
 	link, err := services.GetShortChainService().CreateShortUrl(param.OriginalUrl)
 	// 检查短链创建过程中是否出错
-	if helper.Empty(link.ShortUrl) || err != nil {
+	if err != nil {
 		// 如果出错，返回500错误
 		c.ErrorJson(ctx, 500, "短链接生成失败", err.Error())
 		return

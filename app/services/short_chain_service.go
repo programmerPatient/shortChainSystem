@@ -1,8 +1,10 @@
 package services
 
 import (
+	"errors"
 	"sync"
 
+	"github.com/laravelGo/app/constant"
 	"github.com/laravelGo/app/helper"
 	"github.com/laravelGo/app/models/link"
 	"github.com/laravelGo/core/redis"
@@ -13,6 +15,8 @@ type ShortChainService struct{}
 var sc_once sync.Once
 
 var sc_s *ShortChainService
+
+const CTEATE_SHORT_URL_MAX_RETRY_TIMES = 10 // 创建短链接的最大重试次数
 
 // GetShortChainService 是一个用于获取ShortChainService实例的函数。
 // 该函数使用了单例模式来确保整个应用中只存在一个ShortChainService实例。
@@ -46,10 +50,22 @@ func (s *ShortChainService) GetOriginalUrlByShortUrl(shortUrl string) string {
 // 返回值 bool 表示短链接是否创建成功。
 // 返回值 error 表示在创建过程中遇到的任何错误。
 func (s *ShortChainService) CreateShortUrl(OriginalUrl string) (*link.Link, error) {
+	if link.IsExist("original_url", OriginalUrl) {
+		return nil, errors.New("该链接已存在,不可重复生成")
+	}
 	// 通过Redis的Incr方法自增索引，为每个原始URL生成一个唯一的ID
-	index := redis.Redis.Incr("short_chain")
+	index := redis.Redis.Incr(constant.ShortChain)
+	num := 0
 	// 将索引值转换为6位的Base64字符串作为短链接的地址
+breaker:
 	str := helper.ToBase64(uint64(index), 6)
+	if link.IsExist("short_url", str) {
+		num++
+		if num > CTEATE_SHORT_URL_MAX_RETRY_TIMES {
+			return nil, errors.New("生成短链接失败")
+		}
+		goto breaker
+	}
 	data := &link.Link{
 		ShortUrl:    str,
 		OriginalUrl: OriginalUrl,

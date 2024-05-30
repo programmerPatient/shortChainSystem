@@ -25,4 +25,14 @@ func init() {
 			"database": config.Env("REDIS_MAIN_DB", 0),
 		}
 	})
+
+	config.AddConfig("bloom_redis", func() map[string]interface{} {
+		return map[string]interface{}{
+
+			"host":     config.Env("REDIS_HOST", "127.0.0.1"),
+			"port":     config.Env("REDIS_PORT", "6379"),
+			"password": config.Env("REDIS_PASSWORD", ""),
+			"name":     "bloom", //过滤器名称
+		}
+	})
 }

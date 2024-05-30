@@ -21,6 +21,6 @@ func All() (links []Link) {
 
 func IsExist(field, value string) bool {
 	var count int64
-	database.DB.Model(Link{}).Where("? = ?", field, value).Count(&count)
+	database.DB.Model(Link{}).Where(field+" = ?", value).Count(&count)
 	return count > 0
 }
